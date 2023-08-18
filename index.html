@@ -5,19 +5,50 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
-
+	<link rel="stylesheet" href="./assets/Stylesheets/style.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
+  <!-- container class for button high score-->
+  <div class ="containerHS">
+    <button id="highScores" class="button">High Scores</button>
+  </div>
+  <!-- div needed for clock count down-->
+  <div id="countdown">60</div>
+  </div>
+  <!-- the container for everything-->
   <div class="container">
     <h1>Quiz App</h1>
+    <!-- div for the quiz-->
     <div id="quiz"></div>
+    <!-- div for results-->
     <div id="result" class="result"></div>
-    <button id="submit" class="button">Submit</button>
+    <!-- button to start the quiz-->
+    <!-- will disappear after your click-->
+    <button id="startQuiz">Start</button>
+    <!-- submit button to submit your answer to go to the next question-->
+    <!-- hidden at first entry view will appear after you start your quiz-->
+    <button id="submit" style="display: hide">submit</button>
+    <!-- retry button to try the quiz over again for a better high score!-->
+    <!-- hidden at first entry view appears after you answer all questions-->
     <button id="retry" class="button hide">Retry</button>
+    <!-- This button will show you what questions you got wrong and the right answer-->
+    <!-- hidden, appears, after last question submitted-->
     <button id="showAnswer" class="button hide">Show Answer</button>
+    <!-- button, submits your high score-->
+    <!-- hidden, appears, after last question submitted-->
+    <button id="submitHighScores" class="button hide">Submit HS</button>
+    <!-- form, first name-->
+    <!-- hidden, appears, after last question submitted-->
+    <form action="" method="get" id="firstName" class="form hide">
+      <label for="firstName">First name:</label>
+      <input type="text" id="'firstNameText" name="firstName"><br><br>
+    </form> 
   </div>
-  <script src="script.js"></script>
+  <script src="./assets/javascript/script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
+<button 

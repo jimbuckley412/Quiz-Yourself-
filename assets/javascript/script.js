@@ -73,71 +73,51 @@ let currentQuestion = 0;
 // for your incorrect score value
 const incorrectAnswers = [];
 let startTime;
-
-// hard set time limit of 60 seconds
-const timeLimit = 60;
-
-// score starts at 0 for each game
-let score = 0;
+const timeLimit = 60; // hard set time limit of 60 seconds
+let score = 0; // score starts at 0 for each game
 
 // quiz click event listeners
 startQuizButton.addEventListener("click", startQuiz);
-submitButton.addEventListener('click', checkAnswer);
-retryButton.addEventListener('click', retryQuiz);
-showAnswerButton.addEventListener('click', showAnswer);
+submitButton.addEventListener("click", checkAnswer);
+retryButton.addEventListener("click", retryQuiz);
+showAnswerButton.addEventListener("click", showAnswer);
+let currentTimeLeft = timeLimit;
 
 // function startQuiz
+// startQuizButton will disappear after click
+// the submitButton will appear instead to submit your answers
 function startQuiz() {
-
-  // startQuizButton will disappear after click
-  startQuizButton.style.display = 'none';
-
-  // the submitButton will appear instead to submit your answers 
+  startQuizButton.style.display = 'none'; 
   submitButton.style.display = 'inline-block';
-
-  // display the questions created in line 2
-  displayQuestion();
-
-  // start 60 second timer
-  startTimer();
+  
+  displayQuestion(); // display the questions created in line 2
+  startTimer(); // start 60 second timer
 }
 
-// function to start timer
+// function to start 
+// 1st if all the questions are answered the countdown will stop
+// 2nd if the countdown greater than 0
+// else if the timer is up the quiz will stop
 function startTimer() {
-  
-  // created a countdownElement attached to the html
-  const countdownElement = document.getElementById('countdown');
-  let count = timeLimit;
-  countdownElement.textContent = count;
-  
-  // function to set up update 
-  function update() {
-    
-    // if all the questions are answered the countdown will stop
+  const countdownElement = document.getElementById('countdown'); // created a countdownElement attached to the html 
+
+  function countDown() {
     if (currentQuestion >= quizData.length) {
       return;
-    }
-    
-    // if the countdown greater than 0
-    if (count > 0) {
+    } if (currentTimeLeft > 0) {
+      currentTimeLeft--; // countdown -1 second at at time
+      countdownElement.textContent = currentTimeLeft;
 
-      // countdown -1 second at at time
-      count--;
-      countdownElement.textContent = count;
-
-      // will update the countdown every 1 seconds
-      setTimeout(update, 1000);
-
-      // else if the timer is up the quiz will stop
+      setTimeout(countDown, 2000); // will update the countdown every 1 seconds
     } else {
       alert("Time's up! Quiz is complete.");
 
-      // check your answers to see how many you got right
-      checkAnswer();
+      checkAnswer(); // check your answers to see how many you got right
+      displayResult();
     }
   }
 
-  update();
+  countDown();
 }
 
 // function to randomy shuffle the question answer order
@@ -150,26 +130,14 @@ function shuffleArray(array) {
 
 // function will display the question on the screen
 function displayQuestion() {
-  
-  // start the timer on first question display puts a time stamp on this quiz.
-  startTime = Date.now();
+  startTime = Date.now(); // start the timer on first question display puts a time stamp on this quiz.
   const questionData = quizData[currentQuestion];
-  
-  // for the question elements i created a div
-  const questionElement = document.createElement('div');
-  
-  // created a class name 'question'
-  questionElement.className = 'question';
-
-  // added the questions from above to the created div
-  questionElement.innerHTML = questionData.question;
-
-  // created another div to show the question option answers on the div
-  const optionsElement = document.createElement('div');
-  optionsElement.className = 'options';
-
-  // adds in the rand question option answer so the correct answer is not in the same place every time
-  const shuffledOptions = [...questionData.options];
+  const questionElement = document.createElement('div'); // for the question elements i created a div
+        questionElement.className = 'question';// created a class name 'question'
+        questionElement.innerHTML = questionData.question; // added the questions from above to the created div
+  const optionsElement = document.createElement('div'); // created another div to show the question option answers on the div
+        optionsElement.className = 'options';
+  const shuffledOptions = [...questionData.options]; // adds in the rand question option answer so the correct answer is not in the same place every time
   shuffleArray(shuffledOptions);
 
   for (let i = 0; i < shuffledOptions.length; i++) {
@@ -207,12 +175,8 @@ function checkAnswer() {
   // if your selectedOption attached by clicking an input checkbox
   const selectedOption = document.querySelector('input[name="quiz"]:checked');
   if (selectedOption) {
-
-    // end time is when you hit submit with your answer time stamped
-    const endTime = Date.now();
-
-    // time taken endTime - startTime
-    const timeTaken = Math.floor((endTime - startTime) / 1000);
+    const endTime = Date.now(); // end time is when you hit submit with your answer time stamped
+    const timeTaken = Math.floor((endTime - startTime) / 1000); // time taken endTime - startTime
     const answer = selectedOption.value;
 
     // !!!!I CHOSE THIS TYPE OF SCORE ON PURPOSE!!!!
@@ -309,7 +273,7 @@ const highScoresButton = document.getElementById('highScores');
 const highScoreName = document.getElementById('firstNameText');
 const submitScoreButton = document.getElementById('submitHighScores');
 
-submitScoreButton.addEventListener('click', () => {
+submitScoreButton.addEventListener("click", () => {
   saveHighScoreNames();
   saveHighScores();
   submitHighScores();
@@ -329,9 +293,9 @@ function saveHighScores(score) {
 function submitHighScores(event) {
   event.preventDefault();
 
-  const highScoreNameEl = document.getElementById('highScoreName');
-  const highScoreDateEl = document.getElementById('highScoreDate');
-  const highScoreEl = document.getElementById('highScore');
+  const highScoreNameEl = document.getElementById('firstNameText');
+  const highScoreDateEl = dayjs().format('MM/DD/YYYY');
+  const highScoreEl = document.getElementById('score');
 
   const name = highScoreNameEl.value.trim();
   console.log (name);
@@ -369,7 +333,7 @@ function readHighScoresFromStorage() {
 }
 
 // high scores button on click will open a new window then print the high scores
-highScoresButton.addEventListener('click', () => {
+highScoresButton.addEventListener("click", () => {
   window.open('', '_blank');
   printHighScores();
 });
@@ -395,7 +359,7 @@ function printHighScores() {
     const deleteEl = document.createElement('button');
     deleteEl.setAttribute('class', deleteButtonClass);
     deleteEl.textContent = 'Delete HS';
-    deleteEl.addEventListener('click', () => handleDeleteHighScores(i));
+    deleteEl.addEventListener("click", () => handleDeleteHighScores(i));
 
     rowEl.appendChild(highScoreEl);
     rowEl.appendChild(highScoreDateEl);
